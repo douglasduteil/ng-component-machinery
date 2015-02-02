@@ -14,10 +14,10 @@ module.exports = function (config) {
 
   ////
 
+  var test = config.test;
   gulp.task(config.name + ':test', function (cb) {
     karma.start({
-      // TODO Add options to customize the path
-      configFile: path.resolve(config.dirname, 'karma.conf.js')
+      configFile: test.unit
     }, cb);
   });
 

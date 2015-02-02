@@ -1,6 +1,8 @@
 'use strict';
 
-var extend = require('util')._extend;
+var path = require('path');
+var merge = require('merge');
+
 var resolve = require('resolve');
 var pkg = require(resolve.sync('./package.json'));
 
@@ -10,23 +12,34 @@ module.exports = function () {
 
   var machineryName = pkg.name;
 
-  var config = extend({
-    name: machineryName,
-    dirname: __dirname,
-    plumberErrorHandler: function () {},
+  var config = merge.recursive({
+      name: machineryName,
+      dirname: __dirname,
+      plumberErrorHandler: function () {},
 
-    src: {
-      cwd: 'src',
-      dest: 'dist',
-      tmp: '.tmp', // @todo .tmp/src breaks
-      styles: '{,*/}*.{css,less,sass,scss}',
-      scripts: '{,*/}*.js',
-      templates: '{,*/}*.tpl.{html,jade}',
-      packageFiles: '{bower,package}.json'
-    }
-  }, this, this.config && this.config[machineryName]);
+      src: {
+        cwd: 'src',
+        dest: 'dist',
+        tmp: '.tmp', // @todo .tmp/src breaks
+        styles: '{,*/}*.{css,less,sass,scss}',
+        scripts: '{,*/}*.js',
+        templates: '{,*/}*.tpl.{html,jade}',
+        packageFiles: '{bower,package}.json'
+      },
 
-  var env = extend({
+      test: {
+        cwd: 'test',
+        dest: 'test',
+        tmp: '.tmp',
+        unit: path.resolve(__dirname, 'karma.conf.js'),
+        coverage: 'coverage',
+        tests: '{,*/}*{.spec,Spec}.js'
+      }
+    },
+    this.config[machineryName]
+  );
+
+  var env = merge({
     log: {
       debug: function () {
         // TODO Test if verbose mode first

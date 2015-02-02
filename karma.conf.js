@@ -4,6 +4,7 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: ['test/*.spec.js'],
     reporters: ['progress'],
-    browsers: ['Chrome']
+    browsers: ['Chrome'],
+    singleRun: true
   });
 };
